@@ -1,0 +1,51 @@
+STATE/PILLAR FOR PROLIANT XL170r GEN9 BIOS TWEAK
+	hp-scripting-tools.rpm in salt7 repo
+	if statement for grains['productname'] == 'ProLiant XL170r Gen9'
+	install tools
+	manage file for config.xml (local? network?)
+	cmd.run script-to-fix-fans
+	reboot 
+
+
+[root@node590 ~]# salt-call grains.item productname
+local:
+    ----------
+    productname:
+        ProLiant XL170r Gen9
+
+===================
+
+{% if grains['productname'] == 'ProLiant XL170r Gen9' %}
+
+#install hp-scripting-tools
+  #notes from qux on node590
+   33  rpm -qpl hp-scripting-tools-11.05-17.rhel7.x86_64.rpm
+   34  rpm -qpl hp-scripting-tools-11.05-17.rhel7.x86_64.rpm  | grep conrep
+   40  dnf install ./hp-scripting-tools-11.05-17.rhel7.x86_64.rpm
+   41  cat /etc/redhat-release
+   42  yum install ./hp-scripting-tools-11.05-17.rhel7.x86_64.rpm
+
+#something like this
+hp-scripting-tools-11.05-17.rhel7.x86_64.rpm
+  pkg:
+    - installed
+
+#if config.xml is local
+/path/to/config.xml
+  file:
+    - managed
+    - user: 0
+    - group: 0
+    - file_mode: keep
+    - source: salt://path/to/config.xml
+
+run-conrep
+  cmd.run:
+    - name: /opt/hp/hp-scripting-tools/bin/conrep -x /opt/hp/hp-scripting-tools/etc/conrep.xml -l /path/to/config.xml
+    - user: root
+    - group: root
+    - cwd: /
+
+{% end if %}
+
+#where/when/how reboot?

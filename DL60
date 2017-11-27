@@ -1,0 +1,4 @@
+[root@node404 ~]# salt-call grains.get productname
+local:
+    ProLiant DL60 Gen9
+
