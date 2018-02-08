@@ -1,0 +1,2 @@
+rpms -> /var/www/html/rpms/centos
+salt -> ?
