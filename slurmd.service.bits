@@ -1,0 +1,7 @@
+/usr/lib/systemd/system/slurmd.service:
+  file:
+    - managed
+    - user: 0
+    - group: 0
+    - mode: 655
+    - source: salt://slurm//usr/lib/systemd/system/slurmd.service
